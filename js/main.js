@@ -36,88 +36,140 @@ function findLoc() {
             
             function handleData( json ) {
                 
+                // console log json data
                 console.log(json);
                 
-                var stations = json.result;
+                // variable to get results
+                var stationData = json.result
                 
-                console.log(stations);
+                // console log stations data
+                console.log(stationData)
                 
-                console.log(stations.length);
-                
-                for (var i = 0; i < 1; i++) {
-
-                    console.log(stations[i]);
+                // for loop to get the first five stations in the json array
+                for (var i = 0; i < 5; i++) {
                     
-                    var resultOne = stations[1],
-                        resultTwo = stations[2],
-                        resultThree = stations[3],
-                        resultFour = stations[4],
-                        resultFive = stations[5];
+                    // console log the five stations
+                    console.log(stationData[i]);
                     
-                    console.log(stations[1])
-                    console.log(stations[2])
-                    console.log(stations[3])
-                    console.log(stations[4])
-                    console.log(stations[5])
+                    // variable to get the station results containers to display results
+                    var resultContainers = document.querySelectorAll(".station");
                     
-                    var stnOne = document.getElementById("station_one"),
-                        stnTwo = document.getElementById("station_two"),
-                        stnThree = document.getElementById("station_three"),
-                        stnFour = document.getElementById("station_four"),
-                        stnFive = document.getElementById("station_five"),
-                        
-                        stnOneName = document.getElementById("station_name_one"),
-                        stnTwoName = document.getElementById("station_name_two"),
-                        stnThreeName = document.getElementById("station_name_three"),
-                        stnFourName = document.getElementById("station_name_four"),
-                        stnFiveName = document.getElementById("station_name_five"),
-                        
-                        stnOneCode = document.getElementById("station_code_one"),
-                        stnTwoCode = document.getElementById("station_code_two"),
-                        stnThreeCode = document.getElementById("station_code_three"),
-                        stnFourCode = document.getElementById("station_code_four"),
-                        stnFiveCode = document.getElementById("station_code_five");
+                    // console log each container
+                    console.log(resultContainers[i]);
                     
+                    // variable to get p elements to display station name
+                    var stnName = document.querySelectorAll(".station .stn_name")
                     
-                    var jsonStnOneName = stations[0].stationname,
-                        jsonStnOneCode = stations[0].crscode,
-                        jsonStnTwoName = stations[1].stationname,
-                        jsonStnTwoCode = stations[1].crscode,
-                        jsonStnThreeName = stations[2].stationname,
-                        jsonStnThreeCode = stations[2].crscode,
-                        jsonStnFourName = stations[3].stationname,
-                        jsonStnFourCode = stations[3].crscode,
-                        jsonStnFiveName = stations[4].stationname,
-                        jsonStnFiveCode = stations[4].crscode;
+                    // console log the p element for station name
+                    console.log(stnName[i])
                     
-                    console.log(jsonStnOneName);
-                    console.log(jsonStnOneCode);
-                    console.log(jsonStnTwoName);
-                    console.log(jsonStnTwoCode);
-                    console.log(jsonStnThreeName);
-                    console.log(jsonStnThreeCode);
-                    console.log(jsonStnFourName);
-                    console.log(jsonStnFourCode);
-                    console.log(jsonStnFiveName);
-                    console.log(jsonStnFiveCode);
+                    // variable to get p elements to display station code
+                    var stnCode = document.querySelectorAll(".station .stn_code");
                     
-                    stnOneName.innerHTML = jsonStnOneName;
-                    stnOneCode.innerHTML = jsonStnOneCode;
-                    stnTwoName.innerHTML = jsonStnTwoName;
-                    stnTwoCode.innerHTML = jsonStnTwoCode;
-                    stnThreeName.innerHTML = jsonStnThreeName;
-                    stnThreeCode.innerHTML = jsonStnThreeCode;
-                    stnFourName.innerHTML = jsonStnFourName;
-                    stnFourCode.innerHTML = jsonStnFourCode;
-                    stnFiveName.innerHTML = jsonStnFiveName;
-                    stnFiveCode.innerHTML = jsonStnFiveCode;
+                    // console log the p elements for station code
+                    console.log(stnCode[i])
                     
+                    // variable to get the station name and code from json data
+                    var jsonStnName = stationData[i].stationname,
+                        jsonStnCode = stationData[i].crscode;
                     
+                    // console log the station name and code
+                    console.log("Station Name: " + jsonStnName + " & " + "Station Code: " + jsonStnCode);
                     
-                    
-                    
+                    stnName[i].innerHTML = jsonStnName;
+                    stnCode[i].innerHTML = jsonStnCode;
                     
                 }
+                
+                
+                
+                
+                
+                
+                
+                
+//                console.log(stations);
+//                
+//                console.log(stations.length);
+//                
+//                 for (var i = 0; i < 5; i++) {
+//
+//                    console.log(stations[i]);
+//                     
+//                     var getStn
+//                     
+//                     
+//                    
+//                    var resultOne = stations[1],
+//                        resultTwo = stations[2],
+//                        resultThree = stations[3],
+//                        resultFour = stations[4],
+//                        resultFive = stations[5];
+//                    
+//                    console.log(stations[1])
+//                    console.log(stations[2])
+//                    console.log(stations[3])
+//                    console.log(stations[4])
+//                    console.log(stations[5])
+//                    
+//                    var stnOne = document.getElementById("station_one"),
+//                        stnTwo = document.getElementById("station_two"),
+//                        stnThree = document.getElementById("station_three"),
+//                        stnFour = document.getElementById("station_four"),
+//                        stnFive = document.getElementById("station_five"),
+//                        
+//                        stnOneName = document.getElementById("station_name_one"),
+//                        stnTwoName = document.getElementById("station_name_two"),
+//                        stnThreeName = document.getElementById("station_name_three"),
+//                        stnFourName = document.getElementById("station_name_four"),
+//                        stnFiveName = document.getElementById("station_name_five"),
+//                        
+//                        stnOneCode = document.getElementById("station_code_one"),
+//                        stnTwoCode = document.getElementById("station_code_two"),
+//                        stnThreeCode = document.getElementById("station_code_three"),
+//                        stnFourCode = document.getElementById("station_code_four"),
+//                        stnFiveCode = document.getElementById("station_code_five");
+//                    
+//                    
+//                    var jsonStnOneName = stations[0].stationname,
+//                        jsonStnOneCode = stations[0].crscode,
+//                        jsonStnTwoName = stations[1].stationname,
+//                        jsonStnTwoCode = stations[1].crscode,
+//                        jsonStnThreeName = stations[2].stationname,
+//                        jsonStnThreeCode = stations[2].crscode,
+//                        jsonStnFourName = stations[3].stationname,
+//                        jsonStnFourCode = stations[3].crscode,
+//                        jsonStnFiveName = stations[4].stationname,
+//                        jsonStnFiveCode = stations[4].crscode;
+//                    
+//                    console.log(jsonStnOneName);
+//                    console.log(jsonStnOneCode);
+//                    console.log(jsonStnTwoName);
+//                    console.log(jsonStnTwoCode);
+//                    console.log(jsonStnThreeName);
+//                    console.log(jsonStnThreeCode);
+//                    console.log(jsonStnFourName);
+//                    console.log(jsonStnFourCode);
+//                    console.log(jsonStnFiveName);
+//                    console.log(jsonStnFiveCode);
+//                    
+//                    stnOneName.innerHTML = jsonStnOneName;
+//                    stnOneCode.innerHTML = jsonStnOneCode;
+//                    stnTwoName.innerHTML = jsonStnTwoName;
+//                    stnTwoCode.innerHTML = jsonStnTwoCode;
+//                    stnThreeName.innerHTML = jsonStnThreeName;
+//                    stnThreeCode.innerHTML = jsonStnThreeCode;
+//                    stnFourName.innerHTML = jsonStnFourName;
+//                    stnFourCode.innerHTML = jsonStnFourCode;
+//                    stnFiveName.innerHTML = jsonStnFiveName;
+//                    stnFiveCode.innerHTML = jsonStnFiveCode;
+                    
+                    
+                    
+                    
+                    
+                    
+                
             }
         }
     } else {
