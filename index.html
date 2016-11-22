@@ -14,62 +14,126 @@
         <script src="js/vendor/modernizr-2.8.3.min.js"></script>
     </head>
     <body>
-
-        <div id="loc_wrapper">
         
-            <div id="show_loc">
+        <div class="track_wrapper">
         
-                <h1>Station Finder</h1>
-
-                <button id="get_loc">Get Location</button>
-
-                <p id="latitude"></p>
-                <p id="longitude"></p>
-
-            </div>
+            <div class="track_container">
             
-            <div id="closest_stations">
-            
-                <div class="station stn_1" id="station_1">
+                <h1 class="title">TRACK</h1>
                 
-                    <p class="stn_name name_1" id="stn_name_1"></p>
-                    <p class="stn_code code_1" id="stn_code_1"></p>
-                
-                </div>
-                
-                <div class="station stn_2" id="station_2">
-                
-                    <p class="stn_name name_2" id="stn_name_2"></p>
-                    <p class="stn_code code_2" id="stn_code_2"></p>
-                
-                </div>
-                
-                <div class="station stn_3" id="station_3">
-                
-                    <p class="stn_name name_3" id="stn_name_3"></p>
-                    <p class="stn_code code_3" id="stn_code_3"></p>
-                
-                </div>
-                
-                <div class="station stn_4" id="station_4">
-                
-                    <p class="stn_name name_4" id="stn_name_4"></p>
-                    <p class="stn_code code_4" id="stn_code_4"></p>
-                
-                </div>
-                
-                <div class="station stn_5" id="station_5">
-                
-                    <p class="stn_name name_5" id="stn_name_5"></p>
-                    <p class="stn_code code_5" id="stn_code_5"></p>
-                
-                </div>
+                <button class="service_btn tfl" data-service="tfl">Underground</button>
+                <button class="service_btn nrl" data-service="nrl">National Rail</button>
             
             </div>
-        
-        </div>
+            
+            <div class="results_wrapper">
+            
+                <div class="hidden service_wrapper tfl_wrapper">
 
-     
+                    <p>London Underground</p>
+
+                    <div class="tfl_station_wrapper">
+
+                        <p class="tfl_station_name">Name 1</p>
+
+                    </div>
+
+                    <div class="tfl_station_wrapper">
+
+                        <p class="tfl_station_name">Name 2</p>
+
+                    </div>
+
+                    <div class="tfl_station_wrapper">
+
+                        <p class="tfl_station_name">Name 3</p>
+
+                    </div>
+
+                    <div class="tfl_station_wrapper">
+
+                        <p class="tfl_station_name">Name 4</p>
+
+                    </div>
+
+                    <div class="tfl_station_wrapper">
+
+                        <p class="tfl_station_name">Name 5</p>
+
+                    </div>
+
+                </div>
+
+                <div class="hidden service_wrapper nrl_wrapper">
+
+                    <div class="nrl_station_wrapper">
+
+                        <p class="nrl_station_name"></p>
+                        <p class="nrl_station_code"></p>
+                        
+                        <p class="next_train">Train Info</p>
+                        <div class="train_info_wrapper_one info_wrapper">
+                        
+                        </div>
+
+                    </div>
+
+                    <div class="nrl_station_wrapper">
+
+                        <p class="nrl_station_name"></p>
+                        <p class="nrl_station_code"></p>
+                        
+                        <p class="next_train">Train Info</p>
+                        <div class="train_info_wrapper_two info_wrapper">
+                        
+                        </div>
+
+                    </div>
+
+                    <div class="nrl_station_wrapper">
+
+                        <p class="nrl_station_name"></p>
+                        <p class="nrl_station_code"></p>
+                        
+                        <p class="next_train">Train Info</p>
+                        <div class="train_info_wrapper_three info_wrapper">
+                        
+                        </div>
+
+                    </div>
+
+                    <div class="nrl_station_wrapper">
+
+                        <p class="nrl_station_name"></p>
+                        <p class="nrl_station_code"></p>
+                        
+                        <p class="next_train">Train Info</p>
+                        <div class="train_info_wrapper_four info_wrapper">
+                        
+                        </div>
+
+                    </div>
+
+                    <div class="nrl_station_wrapper">
+
+                        <p class="nrl_station_name"></p>
+                        <p class="nrl_station_code"></p>
+                        
+                        <p class="next_train">Train Info</p>
+                        <div class="train_info_wrapper_five info_wrapper"> 
+                        
+                        </div>
+
+                    </div>
+
+                </div>
+        
+            </div>
+                
+                
+            </div>
+            
+        
         
         <script src="js/vendor/jquery_v3.1.1.min.js"></script>
         

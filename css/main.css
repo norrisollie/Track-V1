@@ -61,33 +61,80 @@ body {
     font-family: "Fira Sans";
     display: flex;
     align-content: center;
+    color: #FFF;
+    background-color: #242424;
 }
 
-#loc_wrapper {
+.service_btn {
+    background-color: #FFF;
+    color:deeppink;
+    outline: none;
+    border: none;
+    width: 100%;
+    padding: 10px 0;
+}
+
+.service_btn.tfl {
+    margin-bottom: 5px;
+}
+
+.track_wrapper {
     width: 100vw;
     height: 100vh;
+    
     display: flex;
-    justify-content: center;
     align-items: center;
     flex-direction: column;
+    position: relative;
+    top: 150px;
 }
 
-#show_loc {
-    width: 100%;
-    text-align: center;
-}
-
-#closest_stations {
-    width: 100%;
+.track_container {
     display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 211px;
 }
 
-.station {
-    flex-grow: 1;
+.title {
+    font-size: 72px;
+    color: #FFF;
+    margin: 0;
+}
+
+.service_wrapper {
+    width: 100vw;
     text-align: center;
+    display: flex;
     
 }
 
+.hidden {
+    display: none;
+}
+
+.results_wrapper {
+    position: relative;
+    top: 100px;
+}
+
+.nrl_station_wrapper {
+    width:100%;
+}
+
+.nrl_title {
+    width: 100%;
+    flex-grow: 1;
+}
+
+.info_wrapper > .indiv_train_wrap:nth-child(odd) {
+    background-color: pink;
+}
+
+.info_wrapper > .indiv_train_wrap:nth-child(even) {
+    background-color: purple;
+}
 
 
 
