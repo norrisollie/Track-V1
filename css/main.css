@@ -58,93 +58,96 @@ textarea {
 
 
 body {
-    font-family: "Fira Sans";
+    font-family: "Helvetica Neue";
     display: flex;
     align-content: center;
     color: #FFF;
     background-color: #242424;
 }
 
-.service_btn {
-    background-color: #FFF;
-    color:deeppink;
-    outline: none;
-    border: none;
-    width: 100%;
-    padding: 10px 0;
-}
-
-.service_btn.tfl {
-    margin-bottom: 5px;
-}
-
 .track_wrapper {
     width: 100vw;
     height: 100vh;
-    
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    position: relative;
-    top: 150px;
 }
 
-.track_container {
+.track_logo_wrapper {
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     flex-direction: column;
-    min-height: 211px;
+    width: 100vw;
+    height: 150px;
+    text-align: center;
 }
 
-.title {
-    font-size: 72px;
-    color: #FFF;
+.logo_title, .loading_message {
     margin: 0;
 }
 
-.service_wrapper {
+.station_wrapper {
     width: 100vw;
-    text-align: center;
-    display: flex;
-    
+    overflow: scroll;
 }
 
-.hidden {
-    display: none;
-}
-
-.results_wrapper {
+.station_info {
     position: relative;
-    top: 100px;
+    top: 0;
+    left:0;
+    min-width: 100vw;
+    height: 150px;
+    background-color: red;
 }
 
-.nrl_station_wrapper {
-    width:100%;
+.station_info_indiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #f8f8f8;
+    color: #242424;
+    width: 150px;
+    height: 150px;
+    box-sizing: border-box;
 }
 
-.nrl_title {
-    width: 100%;
-    flex-grow: 1;
-}
-
-.info_wrapper > .indiv_train_wrap:nth-child(odd) {
+.service_info {
+    display: flex;
+    position: relative;
+    top: -150px;
+    left:150px;
+    height: 160px;
     background-color: pink;
+    overflow: scroll;
 }
 
-.info_wrapper > .indiv_train_wrap:nth-child(even) {
-    background-color: purple;
+.service_info_indiv {
+    display: flex;
+    flex-direction: column;
+    background-color:gray;
+    flex-grow: 0;     /* do not grow   - initial value: 0 */
+    flex-shrink: 0;   /* do not shrink - initial value: 1 */
+    flex-basis: 150px;
+    width: 150px;
+    height: 150px;
+    padding: 5px;
+}
+
+.service_info_indiv > p {
+    margin: 0;
+    font-size: 12px;
+}
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
 }
 
 
 
-
-
-
-
-
-
-
+.left {
+}
 
 
 /* ==========================================================================

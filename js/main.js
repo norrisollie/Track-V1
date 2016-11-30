@@ -1,501 +1,504 @@
-// function to get the user location
-window.onload = function getUserLoc() {
-    // see whether the users geolocation is working
-    if (navigator.geolocation) {
-        // console log to output whether geolocation works
-        console.log("Geolocation is working");
-        // *** not sure what this is doing ***
-        navigator.geolocation.getCurrentPosition(showPosition);
-        // function to be able to get the current latitude and longitude of user
-        function showPosition(position) {
-            // stores the current latitude and longitude of user
+// variable to get the loading message element
+    var findLocMsg = document.querySelector(".loading_message");
+
+// find the users location
+// runs on load when window opens
+window.onload = function findLocation() {
+    
+    // find if the browser supports geolocation
+    if(navigator.geolocation) {
+        
+        // logs to the console that geolocation is working
+        console.log("Geolocation is working, finding your location...");
+        
+        // update user on progress
+        findLocMsg.innerHTML = "Finding your location....";
+            
+    
+        // required to locate the current position of user
+        navigator.geolocation.getCurrentPosition(getPosition);
+        
+        // function to get the latitude and longitude of user
+        function getPosition(position) {
+            
+            // variables to store coordinates of user
             var userLat = position.coords.latitude,
                 userLon = position.coords.longitude;
-            // console log the coordinates of user
-            console.log("Latitude: " + userLat + " & " + "Longitude: " + userLon);
-            // now we need to see what button the user has clicked to determine whether we need to show them underground stations or national rail stations
-            // declare variables to store tfl and nrl buttons in dom
-            var serviceBtn_tfl = document.querySelector(".tfl"),
-                serviceBtn_nrl = document.querySelector(".nrl");
-            // add event listeners to tfl and nrl buttons then run the function "getDataset to find out what button was clicked
-            serviceBtn_tfl.addEventListener("click", getDataset);
-            serviceBtn_nrl.addEventListener("click", getDataset);
-            // function to get the dataset of what button was clicked
-            function getDataset(e) {
-                // variable to store the dataset
-                var theDataset = e.target.dataset.service;
-                // variable to store tfl/nrl container in dom
-                    var tflWrapper = document.querySelector(".tfl_wrapper");
-                    var nrlWrapper = document.querySelector(".nrl_wrapper");
-                // log the dataset returned from element
-                console.log(theDataset);
-                // if/else statement to determine what button was pressed and what to show/hide
-                // if the dataset contains tfl
-                if (theDataset === "tfl") {
-                    // logs the result and dataset entry
-                    console.log("The result was " + theDataset);
-                    // shows and hides tfl/nrl buttons
-                    serviceBtn_tfl.classList.add("hidden");
-                    serviceBtn_nrl.classList.remove("hidden");
-                    // removes "hidden" class from nrlWrapper element
-                    tflWrapper.classList.remove("hidden");
-                    nrlWrapper.classList.add("hidden");
-                    
-                    
-                    
-                    
-                    
-                    
-                    // if the dataset contains national rail
-                } else if (theDataset === "nrl") {
-                    // logs the result and dataset entry
-                    console.log("The result was " + theDataset);
-                    // shows and hides tfl/nrl buttons
-                    serviceBtn_nrl.classList.add("hidden");
-                    serviceBtn_tfl.classList.remove("hidden");
-                   
-                    // removes "hidden" class from nrlWrapper element
-                    nrlWrapper.classList.remove("hidden");
-                    tflWrapper.classList.add("hidden");
-                    
-                    // declare variables to store in array
-                    var nrlStnWrapper = document.querySelectorAll(".nrl_station_wrapper"),
-                        nrlStnName = document.querySelectorAll(".nrl_station_name"),
-                        nrlStnCode = document.querySelectorAll(".nrl_station_code")
-                    
-                    // for loop to store each element for nrl station container, station name and station code
-                    for (var i = 0; i < nrlStnWrapper.length; i++) {
-                        // logs the divs for wrapper, name and code
-//                        console.log(nrlStnWrapper[i]);
-//                        console.log(nrlStnName[i]);
-//                        console.log(nrlStnCode[i]);
-                    }
             
-                    // create the URL for national rail railway stations
-                    var nrlURL = "https://data.gov.uk/data/api/service/transport/naptan_railway_stations/nearest?lat="+ userLat+"&lon="+userLon;
-                    
-                    // ajax request to get data from API
-                    var request = new XMLHttpRequest();
-                    request.open('GET', nrlURL, true);
-                    request.onload = function() {
-                        if (request.status >= 200 && request.status < 400) {
-                            // console log to say it has worked
-                            console.log("NRL AJAX request successful");
-                            var NRLdata = JSON.parse(request.responseText);
-                            // console log the data
-//                            console.log(NRLdata);
-                            // variable to get inside the json data
-                            var NRLresults = NRLdata.result;
-                            // console log the results array
-//                            console.log(NRLresults);
-                            // for loop to get the first five results in an array
-                            
-                            var transportAPI_url_array = [];
-                            
-                            for (var i = 0; i < 5; i++) {
-                                // console log the first five entries individually
-                                console.log(NRLresults[i]);
-                                // declare variables for each piece of data we need from json
-                                var jsonStnName = NRLresults[i].stationname,
-                                    jsonStnCode = NRLresults[i].crscode,
-                                    jsonStnCoords = NRLresults[i].latlong.coordinates;
-                                
-                                // console log the name and code for each station
-                                console.log("Name: " + jsonStnName + " & Code: " + jsonStnCode + " Coordinates: " + jsonStnCoords[1] + "," + jsonStnCoords[0]);   
-                                
-                                // places data in to relevant element
-                                nrlStnName[i].innerHTML = jsonStnName;
-                                nrlStnCode[i].innerHTML = jsonStnCode;
-                                
-                                // create url for transport api request
-                                var transportAPIURL = "http://transportapi.com/v3/uk/train/station/"+ jsonStnCode + "/live.json?app_id=03bf8009&app_key=d9307fd91b0247c607e098d5effedc97&darwin=false&train_status=passenger";
-                            // log the url for each station 
-                                console.log("The URL for " + jsonStnName.replace("Rail Station","") + "is " + transportAPIURL);
-                                // push urls in to new array for each station
-                                transportAPI_url_array.push(transportAPIURL);
-                            }
-                            
-                            
-                            // request for station one
-                            var requestOne = new XMLHttpRequest();
-                            requestOne.open('GET', transportAPI_url_array[0], true);
-
-                            requestOne.onload = function() {
-                                if (requestOne.status >= 200 && requestOne.status < 400) {
-                                    // Success!
-                                    var stnDataOne = JSON.parse(requestOne.responseText);
-                                    
-                                    var reqOneResults = stnDataOne.departures.all;
-                                    
-                                    
-                                    for (var i = 0; i <= reqOneResults.length; i++) {
-                                        
-                                         // variables for each piece of json data from API
-                                            var jsonTrainOperator = reqOneResults[i].operator,
-                                                jsonPlatformNo = reqOneResults[i].platform,
-                                                jsonDepartTime = reqOneResults[i].aimed_departure_time,
-                                                jsonOriginName = reqOneResults[i].origin_name,
-                                                jsonDestinationName = reqOneResults[i].destination_name,
-                                                jsonServiceStatus = reqOneResults[i].status,
-                                                jsonExpectedDepartTime = reqOneResults[i].expected_departure_time;
-                                        
-                                        console.log(jsonTrainOperator);
-                                        console.log(jsonPlatformNo);
-                                        console.log(jsonDepartTime);
-                                        console.log(jsonOriginName);
-                                        console.log(jsonDestinationName);
-                                        console.log(jsonServiceStatus);
-                                        console.log(jsonExpectedDepartTime); 
-                                        
-                                        var trainInfoWrapperOne = document.querySelector(".train_info_wrapper_one"),
-                                            openIndivWrap = '<div class="indiv_train_wrap">',
-                                            trainOperator = '<p class="train_operator">' + jsonTrainOperator + '</p>',
-                                            trainDestination = '<p class="train_destination">' + jsonDestinationName + '</p>',
-                                            trainStatus = '<p class="train_status">' + jsonServiceStatus + '</p>',
-                                            trainDepart = '<p class="train_time_depart">' + jsonDepartTime + '</p>',
-                                            trainExpectedDepart = '<p class="train_time_expected_depart">' + jsonExpectedDepartTime + '</p>',
-                                            trainPlatform = '<p class="train_platform">' + jsonPlatformNo + '</p>',
-                                            closeIndivWrap = '</div>';
-                                        
-                                        var placeholderOne = openIndivWrap + trainOperator + trainDestination + trainStatus + trainDepart + trainExpectedDepart + trainPlatform + closeIndivWrap;
-                                        
-                                        trainInfoWrapperOne.innerHTML += placeholderOne;
-                                    }
-                                } else {
-                                    // We reached our target server, but it returned an error
-                                }
-                            };
-                            requestOne.onerror = function() {
-                                // There was a connection error of some sort
-                            };
-                            window.onload = requestOne.send();
-                            
-                            // request for station two
-                            var requestTwo = new XMLHttpRequest();
-                            requestTwo.open('GET', transportAPI_url_array[1], true);
-
-                            requestTwo.onload = function() {
-                                if (requestTwo.status >= 200 && requestTwo.status < 400) {
-                                    // Success!
-                                    var stnDataTwo = JSON.parse(requestTwo.responseText);
-                                    
-                                    var reqTwoResults = stnDataTwo.departures.all;
-                                    
-                                    for (var i = 0; i <= reqTwoResults.length; i++) {
-                                        
-                                         // variables for each piece of json data from API
-                                            var jsonTrainOperator = reqTwoResults[i].operator,
-                                                jsonPlatformNo = reqTwoResults[i].platform,
-                                                jsonDepartTime = reqTwoResults[i].aimed_departure_time,
-                                                jsonOriginName = reqTwoResults[i].origin_name,
-                                                jsonDestinationName = reqTwoResults[i].destination_name,
-                                                jsonServiceStatus = reqTwoResults[i].status,
-                                                jsonExpectedDepartTime = reqTwoResults[i].expected_departure_time;
-                                        
-                                        console.log(jsonTrainOperator);
-                                        console.log(jsonPlatformNo);
-                                        console.log(jsonDepartTime);
-                                        console.log(jsonOriginName);
-                                        console.log(jsonDestinationName);
-                                        console.log(jsonServiceStatus);
-                                        console.log(jsonExpectedDepartTime); 
-                                        
-                                        var trainInfoWrapperTwo = document.querySelector(".train_info_wrapper_two"),
-                                            openIndivWrap = '<div class="indiv_train_wrap">',
-                                            trainOperator = '<p class="train_operator">' + jsonTrainOperator + '</p>',
-                                            trainDestination = '<p class="train_destination">' + jsonDestinationName + '</p>',
-                                            trainStatus = '<p class="train_status">' + jsonServiceStatus + '</p>',
-                                            trainDepart = '<p class="train_time_depart">' + jsonDepartTime + '</p>',
-                                            trainExpectedDepart = '<p class="train_time_expected_depart">' + jsonExpectedDepartTime + '</p>',
-                                            trainPlatform = '<p class="train_platform">' + jsonPlatformNo + '</p>',
-                                            closeIndivWrap = '</div>';
-                                        
-                                        var placeholderTwo = openIndivWrap + trainOperator + trainDestination + trainStatus + trainDepart + trainExpectedDepart + trainPlatform + closeIndivWrap;
-                                        
-                                        trainInfoWrapperTwo.innerHTML += placeholderTwo;
-                                        
-                                    }
-                                    
-                                } else {
-                                    // We reached our target server, but it returned an error
-                                }
-                            };
-                            requestTwo.onerror = function() {
-                                // There was a connection error of some sort
-                            };
-                            window.onload = requestTwo.send();
-                            
-                            //request for station three
-                            
-                            var requestThree = new XMLHttpRequest();
-                            requestThree.open('GET', transportAPI_url_array[2], true);
-
-                            requestThree.onload = function() {
-                                if (requestThree.status >= 200 && requestThree.status < 400) {
-                                    // Success!
-                                    var stnDataThree = JSON.parse(requestThree.responseText);
-                                    
-                                    console.log(stnDataThree);
-                                    
-                                    var reqThreeResults = stnDataThree.departures.all;
-                                    
-                                    for (var i = 0; i <= reqThreeResults.length; i++) {
-                                        
-                                         // variables for each piece of json data from API
-                                            var jsonTrainOperator = reqThreeResults[i].operator,
-                                                jsonPlatformNo = reqThreeResults[i].platform,
-                                                jsonDepartTime = reqThreeResults[i].aimed_departure_time,
-                                                jsonOriginName = reqThreeResults[i].origin_name,
-                                                jsonDestinationName = reqThreeResults[i].destination_name,
-                                                jsonServiceStatus = reqThreeResults[i].status,
-                                                jsonExpectedDepartTime = reqThreeResults[i].expected_departure_time;
-                                        
-                                        var trainInfoWrapperThree = document.querySelector(".train_info_wrapper_three"),
-                                            openIndivWrap = '<div class="indiv_train_wrap">',
-                                            trainOperator = '<p class="train_operator">' + jsonTrainOperator + '</p>',
-                                            trainDestination = '<p class="train_destination">' + jsonDestinationName + '</p>',
-                                            trainStatus = '<p class="train_status">' + jsonServiceStatus + '</p>',
-                                            trainDepart = '<p class="train_time_depart">' + jsonDepartTime + '</p>',
-                                            trainExpectedDepart = '<p class="train_time_expected_depart">' + jsonExpectedDepartTime + '</p>',
-                                            trainPlatform = '<p class="train_platform">' + jsonPlatformNo + '</p>',
-                                            closeIndivWrap = '</div>';
-                                        
-                                        var placeholderThree = openIndivWrap + trainOperator + trainDestination + trainStatus + trainDepart + trainExpectedDepart + trainPlatform + closeIndivWrap;
-                                        
-                                        trainInfoWrapperThree.innerHTML += placeholderThree;
-                                        
-                                        console.log(jsonTrainOperator);
-                                        console.log(jsonPlatformNo);
-                                        console.log(jsonDepartTime);
-                                        console.log(jsonOriginName);
-                                        console.log(jsonDestinationName);
-                                        console.log(jsonServiceStatus);
-                                        console.log(jsonExpectedDepartTime); 
-                                    }
-                                    
-                                    
-                                } else {
-                                    // We reached our target server, but it returned an error
-                                }
-                            };
-                            requestThree.onerror = function() {
-                                // There was a connection error of some sort
-                            };
-                            window.onload = requestThree.send();
-                            
-                            // request for station four
-                            
-                            var requestFour = new XMLHttpRequest();
-                            requestFour.open('GET', transportAPI_url_array[3], true);
-
-                            requestFour.onload = function() {
-                                if (requestFour.status >= 200 && requestFour.status < 400) {
-                                    // Success!
-                                    var stnDataFour = JSON.parse(requestFour.responseText);
-                                    
-                                    console.log(stnDataFour);
-                                    
-                                    var reqFourResults = stnDataFour.departures.all;
-                                    
-                                    for (var i = 0; i <= reqFourResults.length; i++) {
-                                        
-                                         // variables for each piece of json data from API
-                                            var jsonTrainOperator = reqFourResults[i].operator,
-                                                jsonPlatformNo = reqFourResults[i].platform,
-                                                jsonDepartTime = reqFourResults[i].aimed_departure_time,
-                                                jsonOriginName = reqFourResults[i].origin_name,
-                                                jsonDestinationName = reqFourResults[i].destination_name,
-                                                jsonServiceStatus = reqFourResults[i].status,
-                                                jsonExpectedDepartTime = reqFourResults[i].expected_departure_time;
-                                        
-                                        var trainInfoWrapperFour = document.querySelector(".train_info_wrapper_four"),
-                                            openIndivWrap = '<div class="indiv_train_wrap">',
-                                            trainOperator = '<p class="train_operator">' + jsonTrainOperator + '</p>',
-                                            trainDestination = '<p class="train_destination">' + jsonDestinationName + '</p>',
-                                            trainStatus = '<p class="train_status">' + jsonServiceStatus + '</p>',
-                                            trainDepart = '<p class="train_time_depart">' + jsonDepartTime + '</p>',
-                                            trainExpectedDepart = '<p class="train_time_expected_depart">' + jsonExpectedDepartTime + '</p>',
-                                            trainPlatform = '<p class="train_platform">' + jsonPlatformNo + '</p>',
-                                            closeIndivWrap = '</div>';
-                                        
-                                        var placeholderFour = openIndivWrap + trainOperator + trainDestination + trainStatus + trainDepart + trainExpectedDepart + trainPlatform + closeIndivWrap;
-                                        
-                                        trainInfoWrapperFour.innerHTML += placeholderFour;
-                                        
-                                        console.log(jsonTrainOperator);
-                                        console.log(jsonPlatformNo);
-                                        console.log(jsonDepartTime);
-                                        console.log(jsonOriginName);
-                                        console.log(jsonDestinationName);
-                                        console.log(jsonServiceStatus);
-                                        console.log(jsonExpectedDepartTime);
-                                    }
-                                    
-                                    
-                                } else {
-                                    // We reached our target server, but it returned an error
-                                }
-                            };
-                            requestFour.onerror = function() {
-                                // There was a connection error of some sort
-                            };
-                            window.onload = requestFour.send();
-                            
-                            // request for stationFive
-                            var requestFive = new XMLHttpRequest();
-                            requestFive.open('GET', transportAPI_url_array[4], true);
-
-                            requestFive.onload = function() {
-                                if (requestFive.status >= 200 && requestFive.status < 400) {
-                                    // Success!
-                                    var stnDataFive = JSON.parse(requestFive.responseText);
-                                    
-                                    console.log(stnDataFive);
-                                    
-                                    var reqFiveResults = stnDataFive.departures.all;
-                                    
-                                    for (var i = 0; i <= reqFiveResults.length; i++) {
-                                        
-                                         // variables for each piece of json data from API
-                                            var jsonTrainOperator = reqFiveResults[i].operator,
-                                                jsonPlatformNo = reqFiveResults[i].platform,
-                                                jsonDepartTime = reqFiveResults[i].aimed_departure_time,
-                                                jsonOriginName = reqFiveResults[i].origin_name,
-                                                jsonDestinationName = reqFiveResults[i].destination_name,
-                                                jsonServiceStatus = reqFiveResults[i].status,
-                                                jsonExpectedDepartTime = reqFiveResults[i].expected_departure_time;
-                                        
-                                        var trainInfoWrapperFive = document.querySelector(".train_info_wrapper_five"),
-                                            openIndivWrap = '<div class="indiv_train_wrap">',
-                                            trainOperator = '<p class="train_operator">' + jsonTrainOperator + '</p>',
-                                            trainDestination = '<p class="train_destination">' + jsonDestinationName + '</p>',
-                                            trainStatus = '<p class="train_status">' + jsonServiceStatus + '</p>',
-                                            trainDepart = '<p class="train_time_depart">' + jsonDepartTime + '</p>',
-                                            trainExpectedDepart = '<p class="train_time_expected_depart">' + jsonExpectedDepartTime + '</p>',
-                                            trainPlatform = '<p class="train_platform">' + jsonPlatformNo + '</p>',
-                                            closeIndivWrap = '</div>';
-                                        
-                                        var placeholderFive = openIndivWrap + trainOperator + trainDestination + trainStatus + trainDepart + trainExpectedDepart + trainPlatform + closeIndivWrap;
-                                        
-                                        trainInfoWrapperFive.innerHTML += placeholderFive;
-                                        
-                                        console.log(jsonTrainOperator);
-                                        console.log(jsonPlatformNo);
-                                        console.log(jsonDepartTime);
-                                        console.log(jsonOriginName);
-                                        console.log(jsonDestinationName);
-                                        console.log(jsonServiceStatus);
-                                        console.log(jsonExpectedDepartTime); 
-                                    }
-                                    
-                                    
-                                } else {
-                                    // We reached our target server, but it returned an error
-                                }
-                            };
-                            requestFive.onerror = function() {
-                                // There was a connection error of some sort
-                            };
-                            window.onload = requestFive.send();
-
-                                
-                                
-                                
-                                
-                                
-                            
-                            
-                            
-                            
-                            
-                            
-                        } else {
-                            // We reached our target server, but it returned an error
-                        }
-                    };
-                    request.onerror = function() {
-                        // There was a connection error of some sort
-                    };
-                    request.send();
-                    
-                    //////////////
-                    // END AJAX //
-                    //////////////
-              
-                    // if there is an error
-                } else {
-                    // logs the result and dataset entry
-                    console.log("Error");
-                }
-            }   
+            // logs the lat and lon of user
+            console.log("User's location: " + userLat + "," + userLon);
+            
+            // shows the coordinates to user
+            findLocMsg.innerHTML = "Searching for closest stations...";
+            
+            return findStations(userLat,userLon)
         }
-        
-     // else statement for geolocation   
+    
+        // if geolocation doesnt work
     } else {
-    // console log to output whether geolocation works
-        console.log("Geolocation is not working")
+        
+        // logs message to console
+        console.log("Geolocation isn't working");
+        
+        // displays message to user
+        findLocMsg.innerHTML = "Geolocation isn't working";
     }
+    
 }
 
+// push urls to an array
+var requestURL_arr = [];
+
+// function to find the closest stations using ajax request to get data
+function findStations(userLat,userLon) {
+    
+    // log the users coordinates just to check
+    console.log(userLat + "," + userLon);
+    
+    // construct the url to get the closest stations from the API
+    var getStationsURL = "https://data.gov.uk/data/api/service/transport/naptan_railway_stations/nearest?lat=" + userLat + "&lon=" + userLon;
+    
+    // log the url just for reference
+    console.log(getStationsURL);
+    
+    // update user on progress
+        findLocMsg.innerHTML = "Searching for stations...";
+            
+    
+    // ajax request to get the data stored in the API
+    var locateStationReq = new XMLHttpRequest();
+    
+    // open the request
+    locateStationReq.open('GET', getStationsURL, true);
+    
+    // run this function when request has been opened
+    locateStationReq.onload = function() {
+        
+        // if the request is successful, do something
+        if (locateStationReq.status >= 200 && locateStationReq.status < 400) {
+            
+            // the request was successful
+            // variable to store the data from API request
+            var stationData = JSON.parse(locateStationReq.responseText);
+            
+            // log the data to console just to confirm it works
+            console.log(stationData);
+            
+            // variable to store individual results in an array
+            var stationDataResults = stationData.result;
+            
+            // variables for the elements required to show data to user
+            var stationCode = document.querySelectorAll(".station_code"),
+                stationName = document.querySelectorAll(".station_name");
+            
+            // for loop to get the stations
+            for (i = 0; i < 5; i++) {
+                
+                // log the information for each station
+                console.log(stationDataResults[i])
+                
+                // variable to store individual data from json data
+                var jsonStationName = stationDataResults[i].stationname,
+                    jsonStationCode = stationDataResults[i].crscode,
+                    // to remove the "Rail Station" string
+                    jsonStationName = jsonStationName.replace(" Rail Station", "");
+                
+                // log each piece of data for each station
+                console.log("Station Name: " + jsonStationName + " & Station Code: " + jsonStationCode);
+                
+                // add station info to html
+                stationName[i].innerHTML = jsonStationName;
+                stationCode[i].innerHTML = jsonStationCode;
+                
+                // generate a url for the API request for transportAPI
+                var transportAPI_url = "https://transportapi.com/v3/uk/train/station/" + jsonStationCode + "/live.json?app_id=03bf8009&app_key=d9307fd91b0247c607e098d5effedc97&darwin=true&train_status=passenger"
+                
+                // push urls in to an array
+                requestURL_arr.push(transportAPI_url);
+                
+            }
+            
+            // return the data to be used in the timetable data request function
+                return timetableDataReq(requestURL_arr, jsonStationCode);
+                
+            
+            // if request is not successful, do this
+        } else {
+            // We reached our target server, but it returned an error
+        }
+    };
+    // if there is an error with the request, run this function
+    locateStationReq.onerror = function() {
+        // There was a connection error of some sort
+    };
+    
+    // send the request
+    locateStationReq.send();
+       
+}
+
+var requestData_obj = {
+    "request_1" : [],
+    "request_2" : [],
+    "request_3" : [],
+    "request_4" : [],
+    "request_5" : []
+}
+    
 
 
+function timetableDataReq(requestURL_arr, jsonStnCode) {
+    
+    // update user on progress
+    findLocMsg.innerHTML = "Finding the train timetable...";
+    
+    for (var i = 0; i < requestURL_arr.length; i++) {
+        
+        console.log(requestURL_arr[i]);
+        
+    }
+    
+    // request 1
+    
+    var request_stn1 = new XMLHttpRequest();
+        request_stn1.open('GET', requestURL_arr[0] , true);
 
+    request_stn1.onload = function() {
+        if (request_stn1.status >= 200 && request_stn1.status < 400) {
+            // Success!
+            var request1_data = JSON.parse(request_stn1.responseText);
+            
+            // push data in to an array in an object
+            requestData_obj.request_1.push(request1_data);
+            
+        } else {
+            // We reached our target server, but it returned an error
+        }
+    };
 
+    request_stn1.onerror = function() {
+        // There was a connection error of some sort
+    };
+    
+    request_stn1.send();
+    
+    // request 2
+    
+    var request_stn2 = new XMLHttpRequest();
+        request_stn2.open('GET', requestURL_arr[1] , true);
 
+    request_stn2.onload = function() {
+        if (request_stn2.status >= 200 && request_stn2.status < 400) {
+            // Success!
+            var request2_data = JSON.parse(request_stn2.responseText);
+            
+            // push data in to an array in an object
+            requestData_obj.request_2.push(request2_data);
+            
+        } else {
+            // We reached our target server, but it returned an error
+        }
+    };
 
+    request_stn2.onerror = function() {
+        // There was a connection error of some sort
+    };
+    
+    request_stn2.send();
+    
+    // request 3
+    
+    var request_stn3 = new XMLHttpRequest();
+        request_stn3.open('GET', requestURL_arr[2] , true);
 
+    request_stn3.onload = function() {
+        if (request_stn3.status >= 200 && request_stn3.status < 400) {
+            // Success!
+            var request3_data = JSON.parse(request_stn3.responseText);
+            
+            // push data in to an array in an object
+            requestData_obj.request_3.push(request3_data);
+            
+        } else {
+            // We reached our target server, but it returned an error
+        }
+    };
 
-//                                // a new ajax request to get the operator codes and other info
-//                                var secondRequest = new XMLHttpRequest();
-//                                request.open('GET', NRLoperatorURL, true);
-//                                request.onload = function() {
-//                                    if (request.status >= 200 && request.status < 400) {
-//                                        // console log to see if request was successful
-//                                        console.log("TransportAPI is working")
-//                                        // variable to get the json data from API
-//                                        var NRLoperatorData = JSON.parse(request.responseText);
-//                                        // log data from api in the console
-//                                        console.log(NRLoperatorData);
-//                                        // variable to get in to the array
-//                                        var NRLstnData = NRLoperatorData.departures.all;
-//                                        // log NRLstnData to console
-//                                        console.log(NRLstnData);
-//                                        // for loop to get each entry in json array
-//                                        for (var i = 0; i <= NRLstnData.length; i++) {
-//                                            // log each individual train journey in console
-//                                            console.log(NRLstnData[i]);
-//                                            
-//                                            // variables for each piece of json data from API
-//                                            var jsonTrainOperator = NRLstnData[i].operator,
-//                                                jsonPlatformNo = NRLstnData[i].platform,
-//                                                jsonDepartTime = NRLstnData[i].aimed_departure_time,
-//                                                jsonOriginName = NRLstnData[i].origin_name,
-//                                                jsonDestinationName = NRLstnData.destination_name,
-//                                                jsonServiceStatus = NRLstnData[i].status,
-//                                                jsonExpectedDepartTime = NRLstnData[i].expected_departure_time;
-//                                            
-////                                            console.log(jsonTrainOperator);
-////                                            console.log(jsonPlatformNo);
-////                                            console.log(jsonDepartTime);
-////                                            console.log(jsonOriginName);
-////                                            console.log(jsonDestinationName);
-////                                            console.log(jsonServiceStatus);
-////                                            console.log(jsonExpectedDepartTime);
-//                                        }
-//                                        
-//                                    
-//                                        
-//                                        
-//                                        
-//                                        
-//                                        
-//                                    } else {
-//                                        // We reached our target server, but it returned an error
-//  }
-//};
-//
-//request.onerror = function() {
-//  // There was a connection error of some sort
-//};
-//
-//request.send();
+    request_stn3.onerror = function() {
+        // There was a connection error of some sort
+    };
+    
+    request_stn3.send();
+    
+    // request 4
+    
+    var request_stn4 = new XMLHttpRequest();
+        request_stn4.open('GET', requestURL_arr[3] , true);
+
+    request_stn4.onload = function() {
+        if (request_stn4.status >= 200 && request_stn4.status < 400) {
+            // Success!
+            var request4_data = JSON.parse(request_stn4.responseText);
+            
+            // push data in to an array in an object
+            requestData_obj.request_4.push(request4_data);
+            
+        } else {
+            // We reached our target server, but it returned an error
+        }
+    };
+
+    request_stn4.onerror = function() {
+        // There was a connection error of some sort
+    };
+    
+    request_stn4.send();
+    
+    // request 5
+    
+    var request_stn5 = new XMLHttpRequest();
+        request_stn5.open('GET', requestURL_arr[4] , true);
+
+    request_stn5.onload = function() {
+        if (request_stn5.status >= 200 && request_stn5.status < 400) {
+            // Success!
+            var request5_data = JSON.parse(request_stn5.responseText);
+            
+            // push data in to an array in an object
+            requestData_obj.request_5.push(request5_data);
+            
+        } else {
+            // We reached our target server, but it returned an error
+        }
+    };
+
+    request_stn5.onerror = function() {
+        // There was a connection error of some sort
+    };
+    
+    request_stn5.send();
+       
+    //
+
+    setTimeout( function(){
+        
+        var closestStation = requestData_obj["request_1"][0].station_name;
+        var req1 = requestData_obj["request_1"][0].departures.all;
+        var req2 = requestData_obj["request_2"][0].departures.all;
+        var req3 = requestData_obj["request_3"][0].departures.all;
+        var req4 = requestData_obj["request_4"][0].departures.all;
+        var req5 = requestData_obj["request_5"][0].departures.all;
+        
+        console.log(req1)
+        console.log(req2)
+        console.log(req3)
+        console.log(req4)
+        console.log(req5)
+        
+        // update user on progress
+        findLocMsg.innerHTML = "Your closest station is " + closestStation;
+        
+        // station 1
+        for (var i = 0; i < req1.length; i++) {
+            console.log(req1[i])
+            
+            json_origin = req1[i].origin_name,
+            json_destination = req1[i].destination_name,
+            json_status = req1[i].status,
+            json_operator = req1[i].operator,
+            json_platform = req1[i].platform,
+            json_expected_departure = req1[i].expected_departure_time;
+            
+            var container_stn1 = document.querySelector(".info_1");
+            
+            var container =
+                '<div class="service_info_indiv">'
+            + '<p class="depart_time">'
+            + '<span class="depart_name left">Departs At: </span>'
+            + '<span class="act_depart_time right">' + json_expected_departure + '</span></p>'
+            + '<p class="train_dest">'
+            + '<span class="dest_word left"> Dest: </span>'
+            + '<span class="act_dest right">' + json_destination + '</span></p>'
+            + '<p class="train_origin">'
+            + '<span class="origin_word left">Origin: </span>'
+            + '<span class="act_origin right">' + json_origin + '</span></p>'
+            + '<p class="stn_plat">'
+            + '<span class="plat_word left">Plat: </span>'
+            + '<span class="act_plat right">' + json_platform + '</span></p>'
+            + '<p class="train_status">'
+            + '<span class="status_word left">Status: </span>'
+            + '<span class="act_status right">' + json_status + '</span>'
+            + '<p class="train_op">'
+            + '<span class="operator_word left"> Operator: </span>'
+            + '<span class="act_operator right">' + json_operator + '</span>'
+            + '</p>'
+            + '</div>'
+            
+            container_stn1.innerHTML += container ;
+            
+        }
+        
+        for (var i = 0; i < req2.length; i++) {
+            console.log(req2[i])
+            
+            var
+            json_origin = req2[i].origin_name,
+            json_destination = req2[i].destination_name,
+            json_status = req2[i].status,
+            json_operator = req2[i].operator,
+            json_platform = req2[i].platform,
+            json_expected_departure = req2[i].expected_departure_time;
+            
+            var container_stn2 = document.querySelector(".info_2");
+            
+            var container =
+                '<div class="service_info_indiv">'
+            + '<p class="depart_time">'
+            + '<span class="depart_name left">Departs At: </span>'
+            + '<span class="act_depart_time right">' + json_expected_departure + '</span></p>'
+            + '<p class="train_dest">'
+            + '<span class="dest_word left"> Dest: </span>'
+            + '<span class="act_dest right">' + json_destination + '</span></p>'
+            + '<p class="train_origin">'
+            + '<span class="origin_word left">Origin: </span>'
+            + '<span class="act_origin right">' + json_origin + '</span></p>'
+            + '<p class="stn_plat">'
+            + '<span class="plat_word left">Plat: </span>'
+            + '<span class="act_plat right">' + json_platform + '</span></p>'
+            + '<p class="train_status">'
+            + '<span class="status_word left">Status: </span>'
+            + '<span class="act_status right">' + json_status + '</span>'
+            + '<p class="train_op">'
+            + '<span class="operator_word left"> Operator: </span>'
+            + '<span class="act_operator right">' + json_operator + '</span>'
+            + '</p>'
+            + '</div>'
+            
+            container_stn2.innerHTML += container;
+        }
+        
+        for (var i = 0; i < req3.length; i++) {
+            console.log(req3[i])
+            
+            var
+            json_origin = req3[i].origin_name,
+            json_destination = req3[i].destination_name,
+            json_status = req3[i].status,
+            json_operator = req3[i].operator,
+            json_platform = req3[i].platform,
+            json_expected_departure = req3[i].expected_departure_time;
+            
+            var container_stn3 = document.querySelector(".info_3");
+            
+            var container =
+                '<div class="service_info_indiv">'
+            + '<p class="depart_time">'
+            + '<span class="depart_name left">Departs At: </span>'
+            + '<span class="act_depart_time right">' + json_expected_departure + '</span></p>'
+            + '<p class="train_dest">'
+            + '<span class="dest_word left"> Dest: </span>'
+            + '<span class="act_dest right">' + json_destination + '</span></p>'
+            + '<p class="train_origin">'
+            + '<span class="origin_word left">Origin: </span>'
+            + '<span class="act_origin right">' + json_origin + '</span></p>'
+            + '<p class="stn_plat">'
+            + '<span class="plat_word left">Plat: </span>'
+            + '<span class="act_plat right">' + json_platform + '</span></p>'
+            + '<p class="train_status">'
+            + '<span class="status_word left">Status: </span>'
+            + '<span class="act_status right">' + json_status + '</span>'
+            + '<p class="train_op">'
+            + '<span class="operator_word left"> Operator: </span>'
+            + '<span class="act_operator right">' + json_operator + '</span>'
+            + '</p>'
+            + '</div>'
+            
+            container_stn3.innerHTML += container;
+        }
+        
+        for (var i = 0; i < req4.length; i++) {
+            console.log(req4[i])
+            
+            var
+            json_origin = req4[i].origin_name,
+            json_destination = req4[i].destination_name,
+            json_status = req4[i].status,
+            json_operator = req4[i].operator,
+            json_platform = req4[i].platform,
+            json_expected_departure = req4[i].expected_departure_time;
+            
+            var container_stn4 = document.querySelector(".info_4");
+            
+            var container =
+                '<div class="service_info_indiv">'
+            + '<p class="depart_time">'
+            + '<span class="depart_name left">Departs At: </span>'
+            + '<span class="act_depart_time right">' + json_expected_departure + '</span></p>'
+            + '<p class="train_dest">'
+            + '<span class="dest_word left"> Dest: </span>'
+            + '<span class="act_dest right">' + json_destination + '</span></p>'
+            + '<p class="train_origin">'
+            + '<span class="origin_word left">Origin: </span>'
+            + '<span class="act_origin right">' + json_origin + '</span></p>'
+            + '<p class="stn_plat">'
+            + '<span class="plat_word left">Plat: </span>'
+            + '<span class="act_plat right">' + json_platform + '</span></p>'
+            + '<p class="train_status">'
+            + '<span class="status_word left">Status: </span>'
+            + '<span class="act_status right">' + json_status + '</span>'
+            + '<p class="train_op">'
+            + '<span class="operator_word left"> Operator: </span>'
+            + '<span class="act_operator right">' + json_operator + '</span>'
+            + '</p>'
+            + '</div>'
+            
+            container_stn4.innerHTML += container;
+            
+        }
+        
+        for (var i = 0; i < req5.length; i++) {
+            console.log(req5[i])
+            
+            var
+            json_origin = req5[i].origin_name,
+            json_destination = req5[i].destination_name,
+            json_status = req5[i].status,
+            json_operator = req5[i].operator,
+            json_platform = req5[i].platform,
+            json_expected_departure = req5[i].expected_departure_time;
+            
+            var container_stn5 = document.querySelector(".info_5");
+            
+            var container =
+                '<div class="service_info_indiv">'
+            + '<p class="depart_time">'
+            + '<span class="depart_name left">Departs At: </span>'
+            + '<span class="act_depart_time right">' + json_expected_departure + '</span></p>'
+            + '<p class="train_dest">'
+            + '<span class="dest_word left"> Dest: </span>'
+            + '<span class="act_dest right">' + json_destination + '</span></p>'
+            + '<p class="train_origin">'
+            + '<span class="origin_word left">Origin: </span>'
+            + '<span class="act_origin right">' + json_origin + '</span></p>'
+            + '<p class="stn_plat">'
+            + '<span class="plat_word left">Plat: </span>'
+            + '<span class="act_plat right">' + json_platform + '</span></p>'
+            + '<p class="train_status">'
+            + '<span class="status_word left">Status: </span>'
+            + '<span class="act_status right">' + json_status + '</span>'
+            + '<p class="train_op">'
+            + '<span class="operator_word left"> Operator: </span>'
+            + '<span class="act_operator right">' + json_operator + '</span>'
+            + '</p>'
+            + '</div>'
+            
+            container_stn5.innerHTML += container;
+        }
+        
+        // removes hidden class at the end to show data
+        var stn_wrap = document.querySelector(".station_wrapper");
+        if (stn_wrap.classList.contains("hidden")) {
+            stn_wrap.classList.remove("hidden");
+        }
+    }, 4000);
+}
