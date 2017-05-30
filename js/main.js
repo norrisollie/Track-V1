@@ -111,7 +111,7 @@ function findStations(userLat,userLon) {
                 stationCode[i].innerHTML = jsonStationCode;
                 
                 // generate a url for the API request for transportAPI
-                var transportAPI_url = "https://transportapi.com/v3/uk/train/station/" + jsonStationCode + "/live.json?app_id=03bf8009&app_key=d9307fd91b0247c607e098d5effedc97&darwin=true&train_status=passenger"
+                var transportAPI_url = "https://transportapi.com/v3/uk/train/station/" + jsonStationCode + "/live.json?app_id=f6f36129&app_key=2b9b604a4495fb6e73df681edba652a1darwin=true&train_status=passenger"
                 
                 // push urls in to an array
                 requestURL_arr.push(transportAPI_url);

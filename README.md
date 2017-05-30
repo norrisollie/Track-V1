@@ -1,17 +1,13 @@
-# Track
+#Blog Posts
 
-A project I worked on as part of a group for the Advanced Web Technologies unit in my third year at Ravensbourne.
+1. [Seth Godin's Ted Talk.](https://docs.google.com/document/d/15aJXTZfRf262DttA7_Om5AwpzTaoSunGr-IhRWcxD_A/edit?usp=sharing)
 
-We had to use more than two or more APIs to create a small web application.
+2. [Moodboards](https://docs.google.com/document/d/1MDQkB63vQu7ghEUPoruZanGsoWAefkFi057j4oLBwww/edit?usp=sharing)
 
-For the unit, we created and application called "Track".
+3. [Life Lessons of an adman](https://docs.google.com/document/d/1NRadSKjdmcBs3vG_jlzHf90oec-LHMUGRy-IUQNJq7Q/edit?usp=sharing)
 
-Track works by finding the user locations, finding five stations closest to you and then displaying the timetables for each station.
+4. [Coursework so far](https://docs.google.com/document/d/1PXgieyUy0ZZR6p_WbI3sZlaEZcX_WCWJf-yclF-mY3I/edit?usp=sharing)
 
-It uses the HTML 5 Geolocation API to find the user's coordinates.
+5. [Formative Feedback](https://docs.google.com/document/d/1F1mJ1MIlAEDMUmr6hRLlx6Jb5oEVod1jE-8B7PutQhQ/edit?usp=sharing)
 
-It uses an API from [data.gov.uk](https://data.gov.uk/data/api/transport) to get the coordinates for every mainline station in the UK to be able to determine the stations closest to the user
-
-It then uses the [TransportAPI](transportapi.com) API to fetch timetable information for the relevant stations.
-
-Check it out [here](https://norrisollie.github.io/track-app)!
+6. [Previous winners](https://docs.google.com/document/d/1kzJARx2ODYYs6uxc4oJ2OWoafSUlP6yWdAbPSrC23N0/edit?usp=sharing)
