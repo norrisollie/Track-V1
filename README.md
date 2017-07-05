@@ -1,6 +1,6 @@
 # Track - Version 1
 
-(https://norrisollie.github.io/track-v1/image.png "Image of Track, V1")
+![alt text](https://norrisollie.github.io/track-v1/image.png "Image of Track, V1")
 
 
 ## About
